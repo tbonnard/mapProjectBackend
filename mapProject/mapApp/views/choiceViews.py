@@ -12,7 +12,7 @@ from ..models import Choice
 
 class ChoiceView(APIView):
     def get(self, request):
-        queryset = Choice.objects.all()
+        queryset = Choice.objects.all().order_by('order')
         if queryset is not None:
             serializer = ChoiceSerializer(queryset, many=True)
             return Response(serializer.data)

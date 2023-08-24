@@ -12,7 +12,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=30, unique=False, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = [ ]
 
     def get_admin_user(self):
         return User.objects.filter(is_superuser=True).first()
@@ -60,6 +60,7 @@ class Project(models.Model):
     title = models.CharField(null=False, blank=False, max_length=255)
     description = models.CharField(null=True, blank=True, max_length=1000)
     created = models.DateTimeField(auto_now_add=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="projectFromUser", default=1)
 
     def __str__(self):
         return self.title

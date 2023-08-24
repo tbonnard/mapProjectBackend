@@ -13,14 +13,11 @@ from ..models import Project, Property
 #projects related to a property
 class ProjectsView(APIView):
     def post(self, request):
-        print(1)
         if (Property.objects.filter(osm_id=request.data['osm_id'], osm_type=request.data['osm_type'])):
-            print(2)
             queryset = Project.objects.filter(property=Property.objects.filter(osm_id=request.data['osm_id'], osm_type=request.data['osm_type']).first()).order_by('-created')
             serializer = ProjectSerializer(queryset, many=True)
             return Response(serializer.data)
-        print(3)
-        queryset = Project.objects.filter(property=Property.objects.filter(osm_id=request.data['osm_id'], osm_type=request.data['osm_type']).first()).order_by('-created')
+        queryset = Project.objects.none()
         serializer = ProjectSerializer(queryset, many=True)
         return Response(serializer.data)
 
