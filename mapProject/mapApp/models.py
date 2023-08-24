@@ -60,7 +60,7 @@ class Project(models.Model):
     title = models.CharField(null=False, blank=False, max_length=255)
     description = models.CharField(null=True, blank=True, max_length=1000)
     created = models.DateTimeField(auto_now_add=True)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="projectFromUser", default=1)
+    creator = models.ForeignKey(User, on_delete=models.SET_DEFAULT, related_name="projectFromUser", default=1)
 
     def __str__(self):
         return self.title

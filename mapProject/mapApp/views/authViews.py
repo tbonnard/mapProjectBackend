@@ -10,14 +10,14 @@ from django.http import JsonResponse
 import jwt, datetime
 from django.middleware import csrf
 
-from ..serializers import UsersSerializer, UserDetailsSerializer
+from ..serializers import UserSerializer, UserDetailsSerializer
 from ..models import User
 from ..utils.validateUserPerm import validate_if_authenticated, validate_superuser
 
 
 class RegisterView(APIView):
     def post(self, request):
-        serializer = UsersSerializer(data=request.data)
+        serializer = UserSerializer(data=request.data)
         # To validate and if not, raises an exception
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -89,34 +89,23 @@ class UserAuthView(APIView):
         except User.DoesNotExist:
             raise Http404
 
-    def get(self, request, format=None):
-        user = request.user
-        #data_authenticated_user = validate_if_authenticated(request)
-        #if data_authenticated_user['authenticated']:
-        instance = self.get_object(user.id)
-        serializer = UserDetailsSerializer(instance)
+    def get(self, request, pk, format=None):
+        instance = self.get_object(pk)
+        serializer = UserSerializer(instance)
         return Response(serializer.data)
-        #raise AuthenticationFailed('Unauthenticated')
 
-    def put(self, request, format=None):
-        data_authenticated_user = validate_if_authenticated(request)
-        if data_authenticated_user['authenticated']:
-            instance = self.get_object(data_authenticated_user['user'].id)
-            serializer = UserDetailsSerializer(instance, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        raise AuthenticationFailed('Unauthenticated')
+    def put(self, request, pk, format=None):
+        instance = self.get_object(pk)
+        serializer = UserSerializer(instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, format=None):
-        data_authenticated_user = validate_if_authenticated(request)
-        if data_authenticated_user['authenticated']:
-            instance = self.get_object(data_authenticated_user['user'].id)
-            instance.delete()
-            return Response('Data erased', status=status.HTTP_204_NO_CONTENT)
-        raise AuthenticationFailed('Unauthenticated')
-
+    def delete(self, request, pk, format=None):
+        instance = self.get_object(pk)
+        instance.delete()
+        return Response('Data erased', status=status.HTTP_204_NO_CONTENT)
 
 
 class UsersAPIView(APIView):
@@ -129,7 +118,7 @@ class UsersAPIView(APIView):
         if data_authenticated_user['authenticated']:
             if validate_superuser(data_authenticated_user['user']):
                 users = User.objects.all()
-                serializer = UsersSerializer(users, many=True)
+                serializer = UserSerializer(users, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response('Forbidden', status=status.HTTP_403_FORBIDDEN)
         raise AuthenticationFailed('Incorrect rights')

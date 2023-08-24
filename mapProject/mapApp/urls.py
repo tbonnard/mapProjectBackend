@@ -8,9 +8,9 @@ urlpatterns = [
     path('register/', authViews.RegisterView.as_view()),
     path('login/', authViews.LoginView.as_view()),
     path('logout/', authViews.LogoutView.as_view()),
+    path('user/<int:pk>/', authViews.UserAuthView.as_view()),
     path('user/admin/', authViews.UsersAPIView.as_view()),
     path('user/admin/<int:pk>/', authViews.UserView.as_view()),
-    path('user/', authViews.UserAuthView.as_view()),
     path('property/', propertyViews.PropertyView.as_view()),
     path('property/<int:pk>/', propertyViews.PropertyDetailsView.as_view()),
     # path('projects/<str:uuid>/', projectViews.ProjectsView.as_view()), #projects related to a property
