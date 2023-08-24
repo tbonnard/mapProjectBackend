@@ -7,6 +7,11 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, blank=False)
     emailConfirmed = models.BooleanField(default=False)
 
+    # when we only want the email, not the username:
+    username = None
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
     def get_admin_user(self):
         return User.objects.filter(is_superuser=True).first()
 

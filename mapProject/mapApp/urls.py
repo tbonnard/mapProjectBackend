@@ -13,7 +13,8 @@ urlpatterns = [
     path('user/', authViews.UserAuthView.as_view()),
     path('property/', propertyViews.PropertyView.as_view()),
     path('property/<int:pk>/', propertyViews.PropertyDetailsView.as_view()),
-    path('projects/<str:uuid>/', projectViews.ProjectsView.as_view()), #projects related to a property
+    # path('projects/<str:uuid>/', projectViews.ProjectsView.as_view()), #projects related to a property
+    path('projects/', projectViews.ProjectsView.as_view()), #projects related to a property
     path('project/<int:pk>/', projectViews.ProjectDetailsView.as_view()),
     path('project/', projectViews.ProjectView.as_view()),
     path('choice/', choiceViews.ChoiceView.as_view()),

@@ -23,7 +23,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password']
+        fields = ['id', 'email', 'password']
         # pour ne pas display le password en return
         extra_kwargs = {
             'password': {'write_only': True}
@@ -42,4 +42,4 @@ class UsersSerializer(serializers.ModelSerializer):
 class UserDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email']
+        fields = ['id', 'email']
