@@ -5,6 +5,7 @@ from django.http import Http404
 from rest_framework import status
 from django.contrib.auth import authenticate, login
 import os
+from django.http import JsonResponse
 
 import jwt, datetime
 from django.middleware import csrf
@@ -20,7 +21,8 @@ class RegisterView(APIView):
         # To validate and if not, raises an exception
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data)
+        userLoggedIn = LoginView.post(self, request)
+        return userLoggedIn
 
 
 class LoginView(APIView):

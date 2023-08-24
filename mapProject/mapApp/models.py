@@ -8,13 +8,21 @@ class User(AbstractUser):
     emailConfirmed = models.BooleanField(default=False)
 
     # when we only want the email, not the username:
-    username = None
+    # Remove the username field
+    username = models.CharField(max_length=30, unique=False, null=True, blank=True)
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     def get_admin_user(self):
         return User.objects.filter(is_superuser=True).first()
 
+# override the methods that refer to the username
+    def get_full_name(self):
+        return self.email
+
+    def get_short_name(self):
+        return self.email
 
 # Osm_id is unique only within object type
 # http://www.openstreetmap.org/way/40000000 vs http://www.openstreetmap.org/node/40000000
