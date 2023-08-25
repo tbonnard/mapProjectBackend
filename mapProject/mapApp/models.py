@@ -12,7 +12,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=30, unique=False, null=True, blank=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [ ]
+    REQUIRED_FIELDS = []
 
     def get_admin_user(self):
         return User.objects.filter(is_superuser=True).first()
@@ -73,3 +73,8 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.description
+
+class Follow(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followFromUser")
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name="followFromProperty")
+    created = models.DateTimeField(auto_now_add=True)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Property, Project, Choice, User
+from .models import Property, Project, Choice, User, Follow
 
 
 class PropertySerializer(serializers.ModelSerializer):
@@ -43,3 +43,9 @@ class UserDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id',  'email']
+
+
+class FollowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Follow
+        fields = '__all__'

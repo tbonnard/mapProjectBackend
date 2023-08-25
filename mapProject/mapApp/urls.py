@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import views, csrfTokenViews, propertyViews, projectViews, choiceViews, authViews
+from .views import (views, csrfTokenViews, propertyViews, projectViews,
+                    choiceViews, authViews, followViews)
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -19,4 +20,6 @@ urlpatterns = [
     path('project/', projectViews.ProjectView.as_view()),
     path('choice/', choiceViews.ChoiceView.as_view()),
     path('choice/<int:pk>/', choiceViews.ChoiceDetailsView.as_view()),
+    path('follow/', followViews.FollowView.as_view()),
+    path('follow/<int:pk>/', followViews.FollowViewDetailsView.as_view()),
 ]
