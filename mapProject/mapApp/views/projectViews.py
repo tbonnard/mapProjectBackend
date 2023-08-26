@@ -6,9 +6,10 @@ from rest_framework import status
 import json
 from django.http import Http404
 
-from ..serializers import ProjectSerializer
-from ..models import Project, Property
+from ..serializers import ProjectSerializer, PropertySerializer
+from ..models import Project, Property, User
 
+from .propertyViews import PropertyCheckView
 
 #projects related to a property
 class ProjectsView(APIView):
@@ -28,12 +29,24 @@ class ProjectView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = ProjectSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
+        if (Property.objects.filter(osm_id=request.data['property']['osm_id'], osm_type=request.data['property']['osm_type'])):
+            property=Property.objects.filter(osm_id=request.data['property']['osm_id'], osm_type=request.data['property']['osm_type']).first()
+            creator = User.objects.get(pk=request.data['user']['id'])
+            newProject = Project(property=property, title=request.data['title'], description=request.data['description'], creator=creator)
+            newProject.save()
+            serializer = ProjectSerializer(newProject)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        else:
+            serializerProperty = PropertySerializer(data=request.data['property'])
+            if serializerProperty.is_valid(raise_exception=True):
+                serializerProperty.save()
+                property = Property.objects.get(pk=serializerProperty.data['id'])
+                creator = User.objects.get(pk=request.data['user']['id'])
+                newProject = Project(property=property, title=request.data['title'],
+                                     description=request.data['description'], creator=creator)
+                newProject.save()
+                serializer = ProjectSerializer(newProject)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class ProjectDetailsView(APIView):
     """

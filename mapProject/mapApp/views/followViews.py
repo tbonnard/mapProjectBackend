@@ -48,7 +48,7 @@ class FollowView(APIView):
         if serializerProperty.is_valid(raise_exception=True):
             serializerProperty.save()
             follower = User.objects.get(pk=request.data['follower'])
-            property = Property.objects.get(serializerProperty.data.id)
+            property = Property.objects.get(pk=serializerProperty.data['id'])
             newFollow = Follow(follower=follower, property=property)
             newFollow.save()
             serializer = FollowSerializer(newFollow)
