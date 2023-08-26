@@ -42,6 +42,7 @@ class User(AbstractUser):
 
 class Property(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    source = models.CharField(null=False, blank=False, max_length=20, default="osm")
     place_id = models.IntegerField(null=False, blank=False)
     osm_id = models.IntegerField(null=False, blank=False)
     osm_type = models.CharField(null=False, blank=False, max_length=20)

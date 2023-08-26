@@ -14,6 +14,7 @@ urlpatterns = [
     path('user/admin/<int:pk>/', authViews.UserView.as_view()),
     path('property/', propertyViews.PropertyView.as_view()),
     path('property/<int:pk>/', propertyViews.PropertyDetailsView.as_view()),
+    path('propertycheck/', propertyViews.PropertyCheckView.as_view()),
     # path('projects/<str:uuid>/', projectViews.ProjectsView.as_view()), #projects related to a property
     path('projects/', projectViews.ProjectsView.as_view()), #projects related to a property
     path('project/<int:pk>/', projectViews.ProjectDetailsView.as_view()),
