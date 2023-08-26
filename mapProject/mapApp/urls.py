@@ -20,6 +20,7 @@ urlpatterns = [
     path('project/', projectViews.ProjectView.as_view()),
     path('choice/', choiceViews.ChoiceView.as_view()),
     path('choice/<int:pk>/', choiceViews.ChoiceDetailsView.as_view()),
+    path('follows/', followViews.FollowsView.as_view()),
     path('follow/', followViews.FollowView.as_view()),
     path('follow/<int:pk>/', followViews.FollowViewDetailsView.as_view()),
 ]

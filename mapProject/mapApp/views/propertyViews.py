@@ -29,6 +29,16 @@ class PropertyView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class PropertyCheckView(APIView):
+    def post(self, request):
+        serializer = PropertySerializer(data=request.data)
+        propertyAlreadyCreated = Property.objects.filter(osm_id=request.data['osm_id'],
+                                                         osm_type=request.data['osm_type']).first()
+        if propertyAlreadyCreated:
+            serializer = PropertySerializer(propertyAlreadyCreated)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response('No data', status=status.HTTP_204_NO_CONTENT)
+
 
 class PropertyDetailsView(APIView):
     """

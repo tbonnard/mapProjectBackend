@@ -47,7 +47,8 @@ class Property(models.Model):
     osm_type = models.CharField(null=False, blank=False, max_length=20)
     lat = models.DecimalField(max_digits=20, decimal_places=15)
     lon = models.DecimalField(max_digits=20, decimal_places=15)
-    display_name = models.CharField(null=False, blank=False, max_length=255)
+    name = models.CharField(null=True, blank=True, max_length=255)
+    display_name = models.CharField(null=False, blank=False, max_length=500)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -75,6 +76,13 @@ class Choice(models.Model):
         return self.description
 
 class Follow(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followFromUser")
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followFromUser")
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name="followFromProperty")
     created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['follower', 'property'], name='unique_follower_property_combination'
+            )
+        ]
