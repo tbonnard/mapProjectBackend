@@ -46,6 +46,13 @@ class UserDetailsSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
+    properties = serializers.SerializerMethodField()
     class Meta:
         model = Follow
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['id', 'follower', 'property', 'properties']
+
+
+    def get_properties(self, obj):
+        selected_properties = Property.objects.filter(pk=obj.property.id).distinct()
+        return PropertySerializer(selected_properties, many=True).data
