@@ -5,10 +5,12 @@ from rest_framework.response import Response
 from rest_framework import status
 import json
 from django.http import Http404
+from decimal import Decimal
 
 from ..serializers import PropertySerializer
 from ..models import Property
 
+from ..utils import distanceCoordinates
 
 class PropertyView(APIView):
     def get(self, request):
@@ -75,3 +77,20 @@ class PropertyDetailsView(APIView):
         instance = self.get_object(pk)
         instance.delete()
         return Response('Data erased', status=status.HTTP_204_NO_CONTENT)
+
+
+class PropertyQueryLocationView(APIView):
+    def post(self, request):
+        coordinatesLatRequested = Decimal(request.data['itemObject']['latitude'])
+        coordinatesLonRequested = Decimal(request.data['itemObject']['longitude'])
+        allProperties = Property.objects.all()
+        propertiesInDistance = []
+        for i in allProperties:
+                valueDistance = distanceCoordinates.get_distance(coordinatesLatRequested, coordinatesLonRequested,
+                                                             i.lat, i.lon)
+                if (valueDistance <= 10):
+                    propertiesInDistance.append(i)
+        if len(propertiesInDistance) > 0:
+            serializer = PropertySerializer(propertiesInDistance, many=True)
+            return Response(serializer.data)
+        return Response('No data', status=status.HTTP_204_NO_CONTENT)
