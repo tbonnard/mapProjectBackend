@@ -15,7 +15,7 @@ def jwt_middleware(get_response):
     def middleware(request):
         # Define a list of URL patterns that don't require authentication
         unauthenticated_urls = ['/admin/', '/api/logout/', '/api/projects/', '/api/propertycheck/',
-                                '/api/querylocation/', '/api/choice/', '/api/login/', '/api/register/',
+                                '/api/querylocation/', '/api/querylocationdb/', '/api/choice/', '/api/login/', '/api/register/',
                                 '/api/get-csrf-token/']
 
         # Check if the request URL is in the unauthenticated URLs list

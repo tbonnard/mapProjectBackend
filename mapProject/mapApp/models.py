@@ -49,7 +49,10 @@ class Property(models.Model):
     lat = models.DecimalField(max_digits=21, decimal_places=16)
     lon = models.DecimalField(max_digits=21, decimal_places=16)
     name = models.CharField(null=True, blank=True, max_length=255)
+    addresstype = models.CharField(null=True, blank=True, max_length=100)
+    type = models.CharField(null=True, blank=True, max_length=100)
     display_name = models.CharField(null=False, blank=False, max_length=500)
+    with_suggestions = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

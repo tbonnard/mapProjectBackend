@@ -4,6 +4,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework import status
 import json
+from django.http import JsonResponse
 from django.http import Http404
 from decimal import Decimal
 
@@ -94,3 +95,20 @@ class PropertyQueryLocationView(APIView):
             serializer = PropertySerializer(propertiesInDistance, many=True)
             return Response(serializer.data)
         return Response('No data', status=status.HTTP_204_NO_CONTENT)
+
+
+class PropertyQueryLocationDBView(APIView):
+    def post(self, request):
+        propertiesToReturn = []
+        for i in request.data['itemObject']:
+            if (Property.objects.filter(osm_id=i['osm_id'],
+                                                     osm_type=i['osm_type']).first()):
+                propertyToAdd = Property.objects.filter(osm_id=i['osm_id'],
+                                                     osm_type=i['osm_type']).first()
+                serializer = PropertySerializer(propertyToAdd)
+                propertiesToReturn.append(serializer.data)
+            else:
+                propertiesToReturn.append((i))
+        print(propertiesToReturn)
+        return JsonResponse(propertiesToReturn, safe=False)
+

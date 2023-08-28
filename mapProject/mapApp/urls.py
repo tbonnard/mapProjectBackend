@@ -16,6 +16,7 @@ urlpatterns = [
     path('property/<int:pk>/', propertyViews.PropertyDetailsView.as_view()),
     path('propertycheck/', propertyViews.PropertyCheckView.as_view()),
     path('querylocation/', propertyViews.PropertyQueryLocationView.as_view()),
+    path('querylocationdb/', propertyViews.PropertyQueryLocationDBView.as_view()),
     path('projects/', projectViews.ProjectsView.as_view()), #projects related to a property
     path('project/<int:pk>/', projectViews.ProjectDetailsView.as_view()),
     path('project/', projectViews.ProjectView.as_view()),

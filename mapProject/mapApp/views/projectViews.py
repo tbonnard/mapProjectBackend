@@ -34,6 +34,9 @@ class ProjectView(APIView):
             creator = User.objects.get(pk=request.data['user']['id'])
             newProject = Project(property=property, title=request.data['title'], description=request.data['description'], creator=creator)
             newProject.save()
+            if property.with_suggestions is False:
+                property.with_suggestions = True
+                property.save()
             serializer = ProjectSerializer(newProject)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
@@ -45,6 +48,9 @@ class ProjectView(APIView):
                 newProject = Project(property=property, title=request.data['title'],
                                      description=request.data['description'], creator=creator)
                 newProject.save()
+                if property.with_suggestions is False:
+                    property.with_suggestions = True
+                    property.save()
                 serializer = ProjectSerializer(newProject)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 
