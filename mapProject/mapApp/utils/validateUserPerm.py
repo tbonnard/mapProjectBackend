@@ -11,9 +11,6 @@ def validate_if_authenticated(request):
         raise AuthenticationFailed('Unauthenticated')
     try:
         payload = jwt.decode(token, 'BTNN02En7EFUV4tsNzOq68hVspfLa9DeRGc6kYTJr5q6Xsrn1Yi2lfJQurB0', algorithms=['HS256'])
-    except jwt.ExpiredSignatureError:
-        raise AuthenticationFailed('Unauthenticated')
-    try:
         user = User.objects.get(pk=payload['id'])
         obj = {
             'authenticated': True,
@@ -22,7 +19,6 @@ def validate_if_authenticated(request):
         return obj
     except jwt.ExpiredSignatureError:
         raise AuthenticationFailed('Unauthenticated')
-
 
 def validate_superuser(user):
     user_to_validate = User.objects.get(pk=user.id)
