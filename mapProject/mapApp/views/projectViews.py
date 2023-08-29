@@ -7,7 +7,7 @@ import json
 from django.http import Http404
 
 from ..serializers import ProjectSerializer, PropertySerializer
-from ..models import Project, Property, User
+from ..models import Project, Property, User, Follow
 
 from .propertyViews import PropertyCheckView
 
@@ -21,6 +21,15 @@ class ProjectsView(APIView):
         queryset = Project.objects.none()
         serializer = ProjectSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class ProjectsUserFollowedPropertyView(APIView):
+    def post(self, request):
+        propertiesFollowedbyUser = [i.property for i in Follow.objects.filter(follower=User.objects.get(pk=request.data['user']))]
+        projectsToReturn = Project.objects.filter(property__in=propertiesFollowedbyUser).order_by('-created')
+        serializer = ProjectSerializer(projectsToReturn, many=True)
+        return Response(serializer.data)
+
 
 class ProjectView(APIView):
     def get(self, request):

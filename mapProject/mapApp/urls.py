@@ -18,6 +18,7 @@ urlpatterns = [
     path('querylocation/', propertyViews.PropertyQueryLocationView.as_view()),
     path('querylocationdb/', propertyViews.PropertyQueryLocationDBView.as_view()),
     path('projects/', projectViews.ProjectsView.as_view()), #projects related to a property
+    path('projectsfollowedpropertiesuser/', projectViews.ProjectsUserFollowedPropertyView.as_view()), #projects related to property followed by the user
     path('project/<int:pk>/', projectViews.ProjectDetailsView.as_view()),
     path('project/', projectViews.ProjectView.as_view()),
     path('choice/', choiceViews.ChoiceView.as_view()),
@@ -26,7 +27,8 @@ urlpatterns = [
     path('vote/<int:pk>/', voteViews.VoteDetailsView.as_view()),
     path('votesproperty/<int:propertyid>/', voteViews.VotePropertyView.as_view()),  # votes related to a property
     path('votesproject/<int:projectid>/', voteViews.VoteProjectView.as_view()),  # votes related to a project
-    path('voteuser/', voteViews.VotePropertyUserView.as_view()),  # votes related to a project
+    path('voteuserproporties/', voteViews.VotePropertyUserView.as_view()),  # votes related to projects in property
+    path('voteuserfollowedproperties/', voteViews.VoteUserFollowedPropertiesView.as_view()),  # votes related to followed properties
     path('follows/', followViews.FollowsView.as_view()),
     path('follow/', followViews.FollowView.as_view()),
     path('follow/<int:pk>/', followViews.FollowViewDetailsView.as_view()),

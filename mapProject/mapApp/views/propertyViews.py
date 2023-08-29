@@ -29,6 +29,10 @@ class PropertyView(APIView):
             return Response(serializer.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
+            propertyCreated = Property.objects.get(pk=serializer.data['id'])
+            if propertyCreated.name is None or propertyCreated.name == '':
+                propertyCreated.name = propertyCreated.display_name
+                propertyCreated.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

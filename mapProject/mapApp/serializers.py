@@ -9,10 +9,15 @@ class PropertySerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializer(serializers.ModelSerializer):
+    properties = serializers.SerializerMethodField()
     class Meta:
         model = Project
         fields = '__all__'
 
+
+    def get_properties(self, obj):
+        selected_properties = Property.objects.filter(pk=obj.property.id).distinct()
+        return PropertySerializer(selected_properties, many=True).data
 
 class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:

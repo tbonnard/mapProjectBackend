@@ -7,7 +7,7 @@ import json
 from django.http import Http404
 
 from ..serializers import VoteSerializer
-from ..models import Vote, Project, Property, User
+from ..models import Vote, Project, Property, User, Follow
 
 
 class VoteView(APIView):
@@ -59,6 +59,16 @@ class VotePropertyUserView(APIView):
             return Response(serializer.data)
         return Response('No data', status=status.HTTP_204_NO_CONTENT)
 
+
+class VoteUserFollowedPropertiesView(APIView):
+    def post(self, request):
+        propertiesFollowedbyUser = [i.property for i in Follow.objects.filter(follower=User.objects.get(pk=request.data['user']))]
+
+        queryset = Vote.objects.filter(property__in=propertiesFollowedbyUser)
+        if queryset is not None:
+            serializer = VoteSerializer(queryset, many=True)
+            return Response(serializer.data)
+        return Response('No data', status=status.HTTP_204_NO_CONTENT)
 
 
 class VoteDetailsView(APIView):
