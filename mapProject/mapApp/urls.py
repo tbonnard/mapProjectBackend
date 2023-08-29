@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (views, csrfTokenViews, propertyViews, projectViews,
-                    choiceViews, authViews, followViews)
+                    choiceViews, authViews, followViews, voteViews)
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -22,6 +22,11 @@ urlpatterns = [
     path('project/', projectViews.ProjectView.as_view()),
     path('choice/', choiceViews.ChoiceView.as_view()),
     path('choice/<int:pk>/', choiceViews.ChoiceDetailsView.as_view()),
+    path('vote/', voteViews.VoteView.as_view()),
+    path('vote/<int:pk>/', voteViews.VoteDetailsView.as_view()),
+    path('votesproperty/<int:propertyid>/', voteViews.VotePropertyView.as_view()),  # votes related to a property
+    path('votesproject/<int:projectid>/', voteViews.VoteProjectView.as_view()),  # votes related to a project
+    path('voteuser/', voteViews.VotePropertyUserView.as_view()),  # votes related to a project
     path('follows/', followViews.FollowsView.as_view()),
     path('follow/', followViews.FollowView.as_view()),
     path('follow/<int:pk>/', followViews.FollowViewDetailsView.as_view()),

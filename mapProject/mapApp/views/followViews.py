@@ -34,7 +34,7 @@ class FollowView(APIView):
                                                                                          osm_type=request.data['property']['osm_type']).first(),
                                                          follower=User.objects.filter(pk=request.data['follower']).first()).first()
         if followingAlreadyCreated:
-            return Response('Data erased', status=status.HTTP_204_NO_CONTENT)
+            return Response('Already created', status=status.HTTP_204_NO_CONTENT)
 
         if (Property.objects.filter(osm_id=request.data['property']['osm_id'], osm_type=request.data['property']['osm_type'])):
             follower = User.objects.get(pk=request.data['follower'])

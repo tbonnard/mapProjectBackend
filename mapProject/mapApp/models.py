@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 from django.contrib.auth.models import AbstractUser
 
+
 # Create your models here.
 class User(AbstractUser):
     email = models.EmailField(unique=True, blank=False)
@@ -79,6 +80,7 @@ class Choice(models.Model):
     def __str__(self):
         return self.description
 
+
 class Follow(models.Model):
     follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followFromUser")
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name="followFromProperty")
@@ -88,5 +90,20 @@ class Follow(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['follower', 'property'], name='unique_follower_property_combination'
+            )
+        ]
+
+
+class Vote(models.Model):
+    voter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="voteFromUser")
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="voteFromProject")
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name="voteFromProperty")
+    value = models.IntegerField(null=False, blank=False)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['voter', 'project', 'value'], name='unique_voter_property_value_combination'
             )
         ]

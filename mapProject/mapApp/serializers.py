@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Property, Project, Choice, User, Follow
+from .models import Property, Project, Choice, User, Follow, Vote
 
 
 class PropertySerializer(serializers.ModelSerializer):
@@ -56,3 +56,9 @@ class FollowSerializer(serializers.ModelSerializer):
     def get_properties(self, obj):
         selected_properties = Property.objects.filter(pk=obj.property.id).distinct()
         return PropertySerializer(selected_properties, many=True).data
+
+
+class VoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vote
+        fields = '__all__'
