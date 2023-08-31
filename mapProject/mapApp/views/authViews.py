@@ -55,8 +55,16 @@ class LoginView(APIView):
         response = Response()
 
         DOMAIN_NAME = os.environ.get("DOMAIN_NAME_PROD")
-        response.set_cookie(key='jwtTk', value=token, httponly=True, samesite='Lax', path="/", domain=DOMAIN_NAME, expires=datetime.datetime.utcnow() + datetime.timedelta(days=1))
-
+        response.set_cookie(
+            key='jwtTk',
+            value=token,
+            httponly=True,
+            samesite='Lax',
+            secure=True,  # Set this to True if using HTTPS
+            path="/",
+            domain=DOMAIN_NAME,  # Adjust to match your domain
+            expires=datetime.datetime.utcnow() + datetime.timedelta(days=1)
+        )
         csrf_token = csrf.get_token(request)
         response.set_cookie(key='csrftoken', value=csrf_token, path="/")
 

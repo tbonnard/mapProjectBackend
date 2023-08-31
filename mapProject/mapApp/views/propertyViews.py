@@ -8,6 +8,8 @@ from django.http import JsonResponse
 from django.http import Http404
 from decimal import Decimal
 
+import osmnx as ox
+
 from ..serializers import PropertySerializer
 from ..models import Property
 
@@ -88,7 +90,7 @@ class PropertyQueryLocationView(APIView):
     def post(self, request):
         coordinatesLatRequested = Decimal(request.data['itemObject']['latitude'])
         coordinatesLonRequested = Decimal(request.data['itemObject']['longitude'])
-        allProperties = Property.objects.all()
+        allProperties = Property.objects.filter(with_suggestions=True)
         propertiesInDistance = []
         for i in allProperties:
                 valueDistance = distanceCoordinates.get_distance(coordinatesLatRequested, coordinatesLonRequested,
@@ -113,6 +115,15 @@ class PropertyQueryLocationDBView(APIView):
                 propertiesToReturn.append(serializer.data)
             else:
                 propertiesToReturn.append((i))
-        print(propertiesToReturn)
         return JsonResponse(propertiesToReturn, safe=False)
 
+
+# osmnx.features.features_from_bbox(north, south, east, west, tags)
+# osmnx.features.features_from_point(center_point, tags, dist=1000)
+# https://osmnx.readthedocs.io/en/stable/user-reference.html
+
+class PropertyQueryLocationAroundView(APIView):
+    def post(self, request):
+        infoEx = ox.features.features_from_point((request.data['itemObject']['lat'],request.data['itemObject']['lng']),
+                                                 tags={"amenity": True}, dist=100)
+        return JsonResponse(infoEx.to_json(), safe=False)
