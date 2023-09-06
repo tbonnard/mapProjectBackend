@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['plagest.onrender.com/', 'plagest.pythonanywhere.com']
 
 
 # Application definition
@@ -60,7 +60,7 @@ MIDDLEWARE = [
 AUTH_USER_MODEL = 'mapApp.User'
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
+    'http://localhost:3000', 'https://plagest.onrender.com'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
