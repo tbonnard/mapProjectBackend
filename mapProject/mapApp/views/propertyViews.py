@@ -103,6 +103,26 @@ class PropertyQueryLocationView(APIView):
         return Response('No data', status=status.HTTP_204_NO_CONTENT)
 
 
+class PropertyQueryLocationViewNotInDBAll(APIView):
+    def post(self, request):
+        print(request.data['itemObjectSearchAround']['coordinates'])
+        coordinatesLatRequested = Decimal(request.data['itemObjectSearchAround']['coordinates']['lat'])
+        coordinatesLonRequested = Decimal(request.data['itemObjectSearchAround']['coordinates']['lon'])
+        allProperties = request.data['itemObjectSearchAround']['properties']
+        propertiesInDistance = []
+        for i in allProperties:
+            print(i)
+            valueDistance = distanceCoordinates.get_distance(coordinatesLatRequested, coordinatesLonRequested,
+                                                             i['lat'], i['lon'])
+            if (valueDistance <= 10):
+                    propertiesInDistance.append(i)
+        if len(propertiesInDistance) > 0:
+            # serializer = PropertySerializer(propertiesInDistance, many=True)
+            # return Response(serializer.data)
+            return JsonResponse(propertiesInDistance, safe=False)
+        return Response('No data', status=status.HTTP_204_NO_CONTENT)
+
+
 class PropertyQueryLocationDBView(APIView):
     def post(self, request):
         propertiesToReturn = []
