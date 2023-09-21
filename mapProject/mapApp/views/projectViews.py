@@ -63,6 +63,21 @@ class ProjectView(APIView):
                 serializer = ProjectSerializer(newProject)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
+class ProjectAllNearbyView(APIView):
+    def post(self, request):
+        allProperties = request.data
+        allProjects = []
+        for i in allProperties:
+            try:
+                projectsFromProperty = Project.objects.filter(property=Property.objects.get(pk=i['id']))
+                for y in projectsFromProperty:
+                    allProjects.append(y)
+            except:
+                pass
+        serializer = ProjectSerializer(allProjects, many=True)
+        return Response(serializer.data)
+
 class ProjectDetailsView(APIView):
     """
     Retrieve, update or delete an instance.

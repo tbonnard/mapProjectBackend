@@ -23,6 +23,7 @@ urlpatterns = [
     path('projectsfollowedpropertiesuser/', projectViews.ProjectsUserFollowedPropertyView.as_view()), #projects related to property followed by the user
     path('project/<int:pk>/', projectViews.ProjectDetailsView.as_view()),
     path('project/', projectViews.ProjectView.as_view()),
+    path('allprojects/', projectViews.ProjectAllNearbyView.as_view()),
     path('choice/', choiceViews.ChoiceView.as_view()),
     path('choice/<int:pk>/', choiceViews.ChoiceDetailsView.as_view()),
     path('vote/', voteViews.VoteView.as_view()),
